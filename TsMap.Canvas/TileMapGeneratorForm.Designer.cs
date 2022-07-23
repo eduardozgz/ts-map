@@ -57,6 +57,7 @@
             this.SecretRoadsCheckBox = new System.Windows.Forms.CheckBox();
             this.GenTilesCheck = new System.Windows.Forms.CheckBox();
             this.triStateTreeView1 = new TsMap.Canvas.TriStateTreeView();
+            this.GenerateOSMCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.StartZoomLevelBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EndZoomLevelBox)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -237,8 +238,6 @@
             // GenTilesCheck
             // 
             this.GenTilesCheck.AutoSize = true;
-            this.GenTilesCheck.Checked = true;
-            this.GenTilesCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.GenTilesCheck.Location = new System.Drawing.Point(10, 12);
             this.GenTilesCheck.Name = "GenTilesCheck";
             this.GenTilesCheck.Size = new System.Drawing.Size(95, 17);
@@ -249,7 +248,7 @@
             // 
             // triStateTreeView1
             // 
-            this.triStateTreeView1.Location = new System.Drawing.Point(10, 59);
+            this.triStateTreeView1.Location = new System.Drawing.Point(10, 82);
             this.triStateTreeView1.Name = "triStateTreeView1";
             treeNode1.Checked = true;
             treeNode1.Name = "GenTileMapInfo";
@@ -278,14 +277,27 @@
             treeNode3,
             treeNode5,
             treeNode7});
-            this.triStateTreeView1.Size = new System.Drawing.Size(166, 149);
+            this.triStateTreeView1.Size = new System.Drawing.Size(166, 126);
             this.triStateTreeView1.TabIndex = 13;
+            // 
+            // GenerateOSMCheckbox
+            // 
+            this.GenerateOSMCheckbox.AutoSize = true;
+            this.GenerateOSMCheckbox.Checked = true;
+            this.GenerateOSMCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.GenerateOSMCheckbox.Location = new System.Drawing.Point(10, 59);
+            this.GenerateOSMCheckbox.Name = "GenerateOSMCheckbox";
+            this.GenerateOSMCheckbox.Size = new System.Drawing.Size(97, 17);
+            this.GenerateOSMCheckbox.TabIndex = 14;
+            this.GenerateOSMCheckbox.Text = "Generate OSM";
+            this.GenerateOSMCheckbox.UseVisualStyleBackColor = true;
             // 
             // TileMapGeneratorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(337, 244);
+            this.Controls.Add(this.GenerateOSMCheckbox);
             this.Controls.Add(this.triStateTreeView1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.GenTilesCheck);
@@ -328,5 +340,6 @@
         private TriStateTreeView triStateTreeView1;
         private System.Windows.Forms.CheckBox SecretRoadsCheckBox;
         private System.Windows.Forms.CheckBox BusStopOverlayCheckBox;
+        private System.Windows.Forms.CheckBox GenerateOSMCheckbox;
     }
 }

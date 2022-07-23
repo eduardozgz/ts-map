@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TsMap.TsItem;
+using System.Xml;
 
 namespace TsMap.Canvas
 {
@@ -115,6 +116,20 @@ namespace TsMap.Canvas
                 bitmap.Save($"{exportPath}/Tiles/{z}/{x}/{y}.png", ImageFormat.Png);
             }
         }
+
+        private void SaveOSM(string exportPath, RenderFlags renderFlags)
+        {
+            var rendererOSM = new TsMapOSMRenderer(_mapper);
+            rendererOSM.Render(renderFlags & ~RenderFlags.TextOverlay);
+
+            var xmlDoc = rendererOSM.xml;
+
+            using (TextWriter sw = new StreamWriter($"{exportPath}/map.osm", false, System.Text.Encoding.ASCII)) //Set encoding
+            {
+                xmlDoc.Save(sw);
+            }
+        }
+
         private void ZoomOutAndCenterMap(float targetWidth, float targetHeight, out PointF pos, out float zoom)
         {
             var mapWidth = _mapper.maxX - _mapper.minX + mapPadding * 2;
@@ -133,7 +148,7 @@ namespace TsMap.Canvas
             }
         }
 
-        private void GenerateTileMap(int startZoomLevel, int endZoomLevel, string exportPath, bool createTiles, bool saveInfo, RenderFlags renderFlags)
+        private void GenerateTileMap(int startZoomLevel, int endZoomLevel, string exportPath, bool createTiles, bool saveInfo, RenderFlags renderFlags, bool generateOSM)
         {
             if (_isGeneratingTileMap)
             {
@@ -143,6 +158,26 @@ namespace TsMap.Canvas
             JsonHelper.SaveSettings(_appSettings);
 
             _isGeneratingTileMap = true;
+
+
+            Task.Run(() =>
+            {
+                if (generateOSM)
+                {
+                    SaveOSM(exportPath, renderFlags);
+                }
+            }).ContinueWith(_ =>
+            {
+                _isGeneratingTileMap = false;
+                RedrawMap();
+                Invoke((Action)(() =>
+                {
+                    Activate(); // Bring form to front if minimized
+                    MessageBox.Show("OSM map has been generated!", "TsMap - OSM Map Generation Finished",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }));
+            });
+
 
             Task.Run(() =>
             {
@@ -292,7 +327,7 @@ namespace TsMap.Canvas
             _tileMapGeneratorForm.Show();
             _tileMapGeneratorForm.BringToFront();
 
-            _tileMapGeneratorForm.GenerateTileMap += (exportPath, startZoomLevel, endZoomLevel, createTiles, exportFlags, renderFlags) => // Called when export button is pressed in TileMapGeneratorForm
+            _tileMapGeneratorForm.GenerateTileMap += (exportPath, startZoomLevel, endZoomLevel, createTiles, exportFlags, renderFlags, generateOSM) => // Called when export button is pressed in TileMapGeneratorForm
             {
                 _tileMapGeneratorForm.Close();
                 _appSettings.LastTileMapPath = exportPath;
@@ -307,7 +342,7 @@ namespace TsMap.Canvas
                     endZoomLevel = tmp;
                 }
 
-                GenerateTileMap(startZoomLevel, endZoomLevel, exportPath, createTiles, (exportFlags & ExportFlags.TileMapInfo) == ExportFlags.TileMapInfo, renderFlags);
+                GenerateTileMap(startZoomLevel, endZoomLevel, exportPath, createTiles, (exportFlags & ExportFlags.TileMapInfo) == ExportFlags.TileMapInfo, renderFlags, generateOSM);
             };
         }
 

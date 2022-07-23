@@ -103,6 +103,7 @@
     <Compile Include="TsTypes.cs" />
     <Compile Include="TsMapper.cs" />
     <Compile Include="TsMapRenderer.cs" />
+    <Compile Include="TsMapOSMRenderer.cs" />
     <Compile Include="TsNode.cs" />
     <Compile Include="TsPrefab.cs" />
     <Compile Include="TsPrefabLook.cs" />

@@ -7,7 +7,7 @@ namespace TsMap.Canvas
     public partial class TileMapGeneratorForm : Form
     {
         public delegate void GenerateTileMapEvent(string exportPath, int startZoomLevel, int endZoomLevel,
-            bool createTiles, ExportFlags exportFlags, RenderFlags renderFlags);
+            bool createTiles, ExportFlags exportFlags, RenderFlags renderFlags, bool generateOSM);
 
         public GenerateTileMapEvent GenerateTileMap;
         public TileMapGeneratorForm(string lastTileMapPath, RenderFlags renderFlags)
@@ -82,7 +82,7 @@ namespace TsMap.Canvas
                 if (!Directory.Exists(folderBrowserDialog1.SelectedPath)) return;
 
                 GenerateTileMap(folderBrowserDialog1.SelectedPath, startZoomLevel, endZoomLevel, GenTilesCheck.Checked,
-                    GetExportFlags(), GetRenderFlags());
+                    GetExportFlags(), GetRenderFlags(), GenerateOSMCheckbox.Checked);
             }
         }
 
